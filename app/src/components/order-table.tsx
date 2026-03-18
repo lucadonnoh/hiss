@@ -33,7 +33,7 @@ function ListingActions({
         <Link
           href={`/listing/${listing.id}`}
           onClick={(e) => e.stopPropagation()}
-          className="px-2 py-0.5 text-[11px] font-medium text-zinc-500 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-600 transition-all"
+          className="px-3 py-1.5 md:px-2 md:py-0.5 text-[11px] font-medium text-zinc-500 hover:text-zinc-300 border border-zinc-800 hover:border-zinc-600 transition-all"
         >
           VIEW
         </Link>
@@ -49,7 +49,7 @@ function ListingActions({
             });
           }}
           disabled={busy}
-          className="px-2 py-0.5 text-[11px] font-medium text-zinc-500 hover:text-red-400 hover:bg-red-500/10 border border-zinc-800 hover:border-red-500/30 transition-all disabled:opacity-40"
+          className="px-3 py-1.5 md:px-2 md:py-0.5 text-[11px] font-medium text-zinc-500 hover:text-red-400 hover:bg-red-500/10 border border-zinc-800 hover:border-red-500/30 transition-all disabled:opacity-40"
         >
           {busy ? 'WAIT' : 'DELIST'}
         </button>
@@ -61,7 +61,7 @@ function ListingActions({
     <Link
       href={`/listing/${listing.id}`}
       onClick={(e) => e.stopPropagation()}
-      className="px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 transition-all"
+      className="px-3 py-1.5 md:px-2 md:py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 hover:border-emerald-500/40 transition-all"
     >
       BUY
     </Link>
@@ -111,6 +111,21 @@ export function OrderTable() {
             </span>
           )}
         </div>
+        {/* Mobile sort controls */}
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={() => toggleSort('price')}
+            className={`text-[10px] px-2 py-1 border transition-colors ${sortBy === 'price' ? 'text-zinc-300 border-zinc-600' : 'text-zinc-600 border-zinc-800'}`}
+          >
+            Price {sortBy === 'price' && (sortDir === 'asc' ? '\u2191' : '\u2193')}
+          </button>
+          <button
+            onClick={() => toggleSort('regs')}
+            className={`text-[10px] px-2 py-1 border transition-colors ${sortBy === 'regs' ? 'text-zinc-300 border-zinc-600' : 'text-zinc-600 border-zinc-800'}`}
+          >
+            Registrations {sortBy === 'regs' && (sortDir === 'asc' ? '\u2191' : '\u2193')}
+          </button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -120,11 +135,12 @@ export function OrderTable() {
       ) : activeListings.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 gap-2">
           <span className="text-zinc-600 text-xs">NO ACTIVE SELLERS</span>
-          <span className="text-zinc-700 text-[10px]">Verify with World ID and post a listing to start selling</span>
+          <span className="text-zinc-700 text-[10px] text-center px-4">Verify with World ID and post a listing to start selling</span>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-[1fr_100px_140px_120px] gap-0 px-4 py-1.5 text-[10px] font-semibold text-zinc-600 uppercase tracking-wider border-b border-[#1a1a1f] bg-[#0a0a0c]">
+          {/* Desktop header row */}
+          <div className="hidden md:grid grid-cols-[1fr_100px_140px_120px] gap-0 px-4 py-1.5 text-[10px] font-semibold text-zinc-600 uppercase tracking-wider border-b border-[#1a1a1f] bg-[#0a0a0c]">
             <div>Seller</div>
             <button onClick={() => toggleSort('regs')} className={`text-center cursor-pointer hover:text-zinc-400 transition-colors ${sortBy === 'regs' ? 'text-zinc-300' : ''}`}>
               Registrations {sortBy === 'regs' && (sortDir === 'asc' ? '\u2191' : '\u2193')}
@@ -139,34 +155,68 @@ export function OrderTable() {
             <div
               key={listing.id}
               onClick={() => router.push(`/listing/${listing.id}`)}
-              className="order-row grid grid-cols-[1fr_100px_140px_120px] gap-0 px-4 py-2 border-b border-[#111114] items-center cursor-pointer"
+              className="order-row border-b border-[#111114] cursor-pointer"
             >
-              <div className="text-xs font-medium flex items-center gap-1.5">
-                <AddressLink address={listing.seller} />
-                {address?.toLowerCase() === listing.seller.toLowerCase() && (
-                  <span className="text-[10px] text-emerald-400/70 bg-emerald-400/10 px-1.5 py-0.5 rounded">YOU</span>
-                )}
-              </div>
-              <div className="text-xs text-center">
-                <span className={listing.registrations === 0 ? 'text-zinc-600' : listing.registrations <= 3 ? 'text-zinc-400' : 'text-yellow-500'}>
-                  {listing.registrations}
-                </span>
-              </div>
-              <div className="text-right">
-                <div className="text-xs text-emerald-400 font-medium glow-accent">
-                  {formatBounty(BigInt(listing.price), listing.token)}
+              {/* Desktop row */}
+              <div className="hidden md:grid grid-cols-[1fr_100px_140px_120px] gap-0 px-4 py-2 items-center">
+                <div className="text-xs font-medium flex items-center gap-1.5">
+                  <AddressLink address={listing.seller} />
+                  {address?.toLowerCase() === listing.seller.toLowerCase() && (
+                    <span className="text-[10px] text-emerald-400/70 bg-emerald-400/10 px-1.5 py-0.5 rounded">YOU</span>
+                  )}
                 </div>
-                {formatUsd(BigInt(listing.price), listing.token, ethPrice) && (
-                  <div className="text-[10px] text-zinc-600">
-                    {formatUsd(BigInt(listing.price), listing.token, ethPrice)}
+                <div className="text-xs text-center">
+                  <span className={listing.registrations === 0 ? 'text-zinc-600' : listing.registrations <= 3 ? 'text-zinc-400' : 'text-yellow-500'}>
+                    {listing.registrations}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-emerald-400 font-medium glow-accent">
+                    {formatBounty(BigInt(listing.price), listing.token)}
                   </div>
-                )}
+                  {formatUsd(BigInt(listing.price), listing.token, ethPrice) && (
+                    <div className="text-[10px] text-zinc-600">
+                      {formatUsd(BigInt(listing.price), listing.token, ethPrice)}
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-end">
+                  <ListingActions
+                    listing={listing}
+                    isSeller={address?.toLowerCase() === listing.seller.toLowerCase()}
+                  />
+                </div>
               </div>
-              <div className="flex justify-end">
-                <ListingActions
-                  listing={listing}
-                  isSeller={address?.toLowerCase() === listing.seller.toLowerCase()}
-                />
+
+              {/* Mobile card */}
+              <div className="md:hidden px-4 py-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="text-xs font-medium flex items-center gap-1.5">
+                    <AddressLink address={listing.seller} />
+                    {address?.toLowerCase() === listing.seller.toLowerCase() && (
+                      <span className="text-[10px] text-emerald-400/70 bg-emerald-400/10 px-1.5 py-0.5 rounded">YOU</span>
+                    )}
+                  </div>
+                  <div className="text-right">
+                    <div className="text-xs text-emerald-400 font-medium glow-accent">
+                      {formatBounty(BigInt(listing.price), listing.token)}
+                    </div>
+                    {formatUsd(BigInt(listing.price), listing.token, ethPrice) && (
+                      <div className="text-[10px] text-zinc-600">
+                        {formatUsd(BigInt(listing.price), listing.token, ethPrice)}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-zinc-600">
+                    {listing.registrations} registration{listing.registrations !== 1 ? 's' : ''}
+                  </span>
+                  <ListingActions
+                    listing={listing}
+                    isSeller={address?.toLowerCase() === listing.seller.toLowerCase()}
+                  />
+                </div>
               </div>
             </div>
           ))}

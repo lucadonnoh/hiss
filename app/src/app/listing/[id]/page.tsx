@@ -20,7 +20,7 @@ export default function ListingPage() {
     <div className="py-6 px-4">
       <Link
         href="/"
-        className="text-[11px] text-zinc-600 hover:text-zinc-400 transition-colors mb-4 inline-block uppercase tracking-wider"
+        className="text-[11px] text-zinc-600 hover:text-zinc-400 transition-colors mb-4 inline-block uppercase tracking-wider py-2"
       >
         &larr; BACK
       </Link>

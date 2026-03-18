@@ -56,7 +56,7 @@ export function CreateListingForm() {
     <div className="flex flex-col h-full">
       <div className="border-b border-[#1a1a1f] px-4 py-2">
         <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
-          Sell Verification
+          Create Listing
         </span>
       </div>
 
@@ -66,7 +66,7 @@ export function CreateListingForm() {
           <ConnectButton />
         </div>
       ) : existingListing ? (
-        <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4 text-center">
+        <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4 py-6 text-center">
           <span className="text-zinc-400 text-xs">YOUR LISTING IS ACTIVE</span>
           <span className="text-emerald-400 text-sm font-semibold">
             {formatBounty(BigInt(existingListing.price), existingListing.token)}
@@ -95,7 +95,7 @@ export function CreateListingForm() {
               <button
                 type="button"
                 onClick={() => setToken('ETH')}
-                className={`flex-1 py-1.5 text-xs font-medium transition-all ${
+                className={`flex-1 py-2.5 md:py-1.5 text-xs font-medium transition-all ${
                   token === 'ETH'
                     ? 'bg-emerald-500/10 text-emerald-400 border-r border-emerald-500/20'
                     : 'text-zinc-600 hover:text-zinc-400 border-r border-[#1a1a1f]'
@@ -106,7 +106,7 @@ export function CreateListingForm() {
               <button
                 type="button"
                 onClick={() => setToken('USDC')}
-                className={`flex-1 py-1.5 text-xs font-medium transition-all ${
+                className={`flex-1 py-2.5 md:py-1.5 text-xs font-medium transition-all ${
                   token === 'USDC'
                     ? 'bg-emerald-500/10 text-emerald-400'
                     : 'text-zinc-600 hover:text-zinc-400'
@@ -128,7 +128,7 @@ export function CreateListingForm() {
               placeholder={token === 'ETH' ? '0.05' : '100'}
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              className={`w-full bg-[#08080a] border px-3 py-2 text-xs text-zinc-200 placeholder:text-zinc-700 focus:outline-none focus:border-emerald-500/50 ${
+              className={`w-full bg-[#08080a] border px-3 py-3 md:py-2 text-sm md:text-xs text-zinc-200 placeholder:text-zinc-700 focus:outline-none focus:border-emerald-500/50 ${
                 !isValidPrice ? 'border-red-500/50' : 'border-[#1a1a1f]'
               }`}
             />
@@ -137,7 +137,7 @@ export function CreateListingForm() {
           <button
             type="submit"
             disabled={!canSubmit}
-            className="w-full py-2.5 text-xs font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:bg-zinc-900 disabled:text-zinc-600 disabled:border-zinc-800 transition-all"
+            className="w-full py-3 md:py-2.5 text-xs font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:bg-zinc-900 disabled:text-zinc-600 disabled:border-zinc-800 transition-all"
           >
             {tx.status === 'pending'
               ? 'CONFIRM IN WALLET...'

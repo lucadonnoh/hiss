@@ -12,6 +12,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: 'hiss — World ID Verification Marketplace',
   description: 'Trustless on-chain escrow for World ID verification on Base.',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -21,9 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${ibmPlexMono.className} bg-[#08080a] text-zinc-300 antialiased scanlines`}
       >
         <Providers>
-          <div className="flex flex-col h-screen overflow-hidden">
+          <div className="flex flex-col min-h-dvh md:h-dvh md:overflow-hidden">
             <Header />
-            <main className="flex-1 overflow-auto">{children}</main>
+            <main className="flex-1 md:overflow-auto">{children}</main>
           </div>
         </Providers>
       </body>

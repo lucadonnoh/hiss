@@ -100,7 +100,7 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
   const doneOrders = orders.filter((o) => o.status !== 'open');
 
   return (
-    <div className="max-w-lg mx-auto space-y-4">
+    <div className="max-w-lg mx-auto space-y-4 px-4 md:px-0">
       <div className="border border-[#1a1a1f] bg-[#0c0c0f]">
         <div className="px-4 py-2.5 border-b border-[#1a1a1f] flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
                 placeholder="0x..."
                 value={agentAddress}
                 onChange={(e) => setAgentAddress(e.target.value)}
-                className={`w-full bg-[#08080a] border px-3 py-2 text-xs text-zinc-200 placeholder:text-zinc-700 focus:outline-none focus:border-emerald-500/50 ${
+                className={`w-full bg-[#08080a] border px-3 py-3 md:py-2 text-sm md:text-xs text-zinc-200 placeholder:text-zinc-700 focus:outline-none focus:border-emerald-500/50 ${
                   !validAgent ? 'border-red-500/50' : 'border-[#1a1a1f]'
                 }`}
               />
@@ -171,7 +171,7 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
             <button
               onClick={handleAccept}
               disabled={!canAccept}
-              className="w-full py-2.5 text-xs font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:bg-zinc-900 disabled:text-zinc-600 disabled:border-zinc-800 transition-all"
+              className="w-full py-3 md:py-2.5 text-xs font-semibold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 hover:border-emerald-500/40 disabled:bg-zinc-900 disabled:text-zinc-600 disabled:border-zinc-800 transition-all"
             >
               {getButtonText()}
             </button>

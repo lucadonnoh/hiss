@@ -89,9 +89,9 @@ function MyOrderRow({ order, address, onUpdate }: { order: OrderData; address: s
   if (isBuyer && (lookupLoading || isRegistered)) return <></>;
 
   return (
-    <div className="my-order-row px-4 py-2.5 border-b border-[#111114] text-xs">
-      <div className="flex items-center justify-between mb-1.5">
-        <div className="flex items-center gap-2">
+    <div className="my-order-row px-4 py-3 border-b border-[#111114] text-xs">
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-zinc-500">ORDER #{order.id}</span>
           <span className="text-[10px] text-emerald-400/70 bg-emerald-400/10 px-1.5 py-0.5 rounded">
             {isBuyer ? 'BUYER' : 'SELLER'}
@@ -103,24 +103,24 @@ function MyOrderRow({ order, address, onUpdate }: { order: OrderData; address: s
             VIEW LISTING
           </Link>
         </div>
-        <span className="text-emerald-400 text-[10px] flex items-center gap-1">
+        <span className="text-emerald-400 text-[10px] flex items-center gap-1 shrink-0">
           <span className="w-1 h-1 rounded-full bg-emerald-400 pulse-dot" />
           PENDING
         </span>
       </div>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 text-zinc-500">
-          <span>Agent: <AddressLink address={order.agentAddress} /></span>
-          <span>{formatBounty(BigInt(order.amount), order.token)}</span>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="flex items-center gap-3 text-zinc-500 min-w-0">
+          <span className="truncate">Agent: <AddressLink address={order.agentAddress} /></span>
+          <span className="shrink-0">{formatBounty(BigInt(order.amount), order.token)}</span>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 shrink-0">
           {isSeller && !lookupLoading && !isRegistered && (
             <button
               onClick={() => {
                 navigator.clipboard.writeText(`npx @worldcoin/agentkit-cli register ${order.agentAddress} --network base`);
                 alert('Command copied! Run it in your terminal to register the agent via World ID.');
               }}
-              className="px-2 py-0.5 text-[11px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-all"
+              className="px-3 py-1.5 md:px-2 md:py-0.5 text-[11px] font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20 transition-all"
             >
               1. REGISTER (COPY CMD)
             </button>
@@ -136,7 +136,7 @@ function MyOrderRow({ order, address, onUpdate }: { order: OrderData; address: s
                 })
               }
               disabled={resolveTx.status === 'pending' || resolveTx.status === 'confirming'}
-              className="px-2 py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 disabled:opacity-40 transition-all"
+              className="px-3 py-1.5 md:px-2 md:py-0.5 text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 disabled:opacity-40 transition-all"
             >
               {resolveTx.status === 'pending' ? 'CONFIRM...' : resolveTx.status === 'confirming' ? 'CLAIM...' : '2. RESOLVE'}
             </button>
@@ -152,7 +152,7 @@ function MyOrderRow({ order, address, onUpdate }: { order: OrderData; address: s
                 })
               }
               disabled={cancelTx.status === 'pending' || cancelTx.status === 'confirming'}
-              className="px-2 py-0.5 text-[11px] font-medium text-zinc-500 hover:text-red-400 border border-zinc-800 hover:border-red-500/30 hover:bg-red-500/5 disabled:opacity-40 transition-all"
+              className="px-3 py-1.5 md:px-2 md:py-0.5 text-[11px] font-medium text-zinc-500 hover:text-red-400 border border-zinc-800 hover:border-red-500/30 hover:bg-red-500/5 disabled:opacity-40 transition-all"
             >
               {cancelTx.status === 'pending' ? 'CONFIRM...' : cancelTx.status === 'confirming' ? 'CANCELLING...' : 'CANCEL'}
             </button>

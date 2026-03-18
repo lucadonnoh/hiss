@@ -27,25 +27,48 @@ export function RecentActivity() {
       {doneOrders.map((order) => (
         <div
           key={order.id}
-          className="px-4 py-2 border-b border-[#111114] text-xs flex items-center justify-between"
+          className="px-4 py-2.5 border-b border-[#111114] text-xs"
         >
-          <div className="flex items-center gap-3">
-            {order.status === 'fulfilled' ? (
-              <span className="text-emerald-400/60 text-[10px] w-16">FILLED</span>
-            ) : (
-              <span className="text-red-400/40 text-[10px] w-16">CANCELLED</span>
-            )}
-            <AddressLink address={order.agentAddress} />
-            <span className="text-zinc-600">&larr;</span>
-            <AddressLink address={order.buyer} />
+          {/* Desktop: single row */}
+          <div className="hidden sm:flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {order.status === 'fulfilled' ? (
+                <span className="text-emerald-400/60 text-[10px] w-16">FILLED</span>
+              ) : (
+                <span className="text-red-400/40 text-[10px] w-16">CANCELLED</span>
+              )}
+              <AddressLink address={order.agentAddress} />
+              <span className="text-zinc-600">&larr;</span>
+              <AddressLink address={order.buyer} />
+            </div>
+            <div className="flex items-center gap-3">
+              <span className={order.status === 'fulfilled' ? 'text-emerald-400/70' : 'text-zinc-600'}>
+                {formatBounty(BigInt(order.amount), order.token)}
+              </span>
+              {order.resolveTxHash && (
+                <TxLink hash={order.resolveTxHash} label="tx" />
+              )}
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className={order.status === 'fulfilled' ? 'text-emerald-400/70' : 'text-zinc-600'}>
-              {formatBounty(BigInt(order.amount), order.token)}
-            </span>
-            {order.resolveTxHash && (
-              <TxLink hash={order.resolveTxHash} label="tx" />
-            )}
+
+          {/* Mobile: stacked */}
+          <div className="sm:hidden space-y-1">
+            <div className="flex items-center justify-between">
+              {order.status === 'fulfilled' ? (
+                <span className="text-emerald-400/60 text-[10px]">FILLED</span>
+              ) : (
+                <span className="text-red-400/40 text-[10px]">CANCELLED</span>
+              )}
+              <span className={order.status === 'fulfilled' ? 'text-emerald-400/70' : 'text-zinc-600'}>
+                {formatBounty(BigInt(order.amount), order.token)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-zinc-500">
+              <AddressLink address={order.agentAddress} />
+              {order.resolveTxHash && (
+                <TxLink hash={order.resolveTxHash} label="tx" />
+              )}
+            </div>
           </div>
         </div>
       ))}
