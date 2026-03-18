@@ -129,8 +129,19 @@ export function OrderTable() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12">
-          <span className="text-zinc-600 text-xs animate-pulse">LOADING...</span>
+        <div className="animate-pulse">
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="px-4 py-3 border-b border-[#111114]">
+              <div className="flex items-center justify-between">
+                <div className="h-3 w-28 bg-zinc-800 rounded" />
+                <div className="h-3 w-24 bg-zinc-800 rounded" />
+              </div>
+              <div className="flex items-center justify-between mt-2">
+                <div className="h-3 w-20 bg-zinc-800 rounded" />
+                <div className="h-6 w-12 bg-zinc-800 rounded" />
+              </div>
+            </div>
+          ))}
         </div>
       ) : activeListings.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12 gap-2">

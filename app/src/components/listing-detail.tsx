@@ -49,8 +49,32 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
 
   if (!listing) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <span className="text-zinc-600 text-xs animate-pulse">LOADING...</span>
+      <div className="max-w-lg mx-auto space-y-4 px-4 md:px-0">
+        <div className="border border-[#1a1a1f] bg-[#0c0c0f] animate-pulse">
+          <div className="px-4 py-2.5 border-b border-[#1a1a1f] flex items-center justify-between">
+            <div className="h-3 w-20 bg-zinc-800 rounded" />
+            <div className="h-4 w-24 bg-zinc-800 rounded" />
+          </div>
+          <div className="divide-y divide-[#111114]">
+            <div className="flex justify-between px-4 py-2.5">
+              <div className="h-3 w-12 bg-zinc-800 rounded" />
+              <div className="h-3 w-28 bg-zinc-800 rounded" />
+            </div>
+            <div className="flex justify-between px-4 py-2.5">
+              <div className="h-3 w-12 bg-zinc-800 rounded" />
+              <div className="h-3 w-10 bg-zinc-800 rounded" />
+            </div>
+            <div className="flex justify-between px-4 py-2.5">
+              <div className="h-3 w-24 bg-zinc-800 rounded" />
+              <div className="h-3 w-6 bg-zinc-800 rounded" />
+            </div>
+          </div>
+          <div className="px-4 py-3 border-t border-[#1a1a1f] space-y-3">
+            <div className="h-3 w-28 bg-zinc-800 rounded" />
+            <div className="h-10 w-full bg-zinc-800 rounded" />
+            <div className="h-10 w-full bg-zinc-800 rounded" />
+          </div>
+        </div>
       </div>
     );
   }

@@ -31,7 +31,11 @@ export function SellerOrderActions({
   const resolveTx = useTx(onUpdate, `${API_BASE}/listings`);
 
   if (lookupLoading) {
-    return <div className="flex-1 text-[10px] text-zinc-600 animate-pulse">CHECKING...</div>;
+    return (
+      <div className="flex-1">
+        <div className="w-full py-2 bg-zinc-800/50 animate-pulse rounded" />
+      </div>
+    );
   }
 
   if (!isRegistered) {

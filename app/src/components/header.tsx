@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useListings } from '@/hooks/use-listings';
 
 export function Header() {
-  const { listings } = useListings();
+  const { listings, isLoading } = useListings();
   const activeCount = listings.filter((l) => l.active).length;
 
   return (
@@ -23,7 +23,12 @@ export function Header() {
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 pulse-dot" />
               <span>
-                SELLERS <span className="text-zinc-300">{activeCount}</span>
+                SELLERS{' '}
+                {isLoading ? (
+                  <span className="inline-block w-3 h-3 bg-zinc-800 rounded animate-pulse align-middle" />
+                ) : (
+                  <span className="text-zinc-300">{activeCount}</span>
+                )}
               </span>
             </div>
           </div>
