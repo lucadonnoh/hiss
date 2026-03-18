@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx ponder start",
+    "dev": "npx ponder dev"
   },
   "keywords": [],
   "author": "",
