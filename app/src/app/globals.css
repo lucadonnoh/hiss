@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --color-terminal-bg: #08080a;
+  --color-terminal-panel: #0c0c0f;
+  --color-terminal-border: #1a1a1f;
+  --color-terminal-row-hover: #101014;
+  --color-terminal-accent: #10b981;
+  --color-terminal-accent-dim: #10b98133;
+  --color-terminal-danger: #ef4444;
+  --color-terminal-muted: #52525b;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+/* Scanline overlay */
+.scanlines::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+}
+
+/* Pulsing live dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #08080a;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a1a1f;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2a2a2f;
+}
+
+/* Number input arrows hidden */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Table row hover */
+.order-row {
+  transition: background-color 0.1s ease;
+}
+.order-row:hover {
+  background-color: #101014;
+}
+
+/* Subtle glow on accent elements */
+.glow-accent {
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}
+
+/* RainbowKit overrides for terminal feel */
+[data-rk] button {
+  font-family: "IBM Plex Mono", monospace !important;
+}
