@@ -1,16 +1,24 @@
 'use client';
 
+import { useEnsName } from 'wagmi';
+import { mainnet } from 'wagmi/chains';
 import { shortenAddress, addressUrl, txUrl } from '@/lib/utils';
 
 export function AddressLink({ address }: { address: string }) {
+  const { data: ensName } = useEnsName({
+    address: address as `0x${string}`,
+    chainId: mainnet.id,
+  });
+
   return (
     <a
       href={addressUrl(address)}
       target="_blank"
       rel="noopener noreferrer"
       className="text-zinc-300 hover:text-emerald-400 transition-colors"
+      title={address}
     >
-      {shortenAddress(address)}
+      {ensName || shortenAddress(address)}
     </a>
   );
 }

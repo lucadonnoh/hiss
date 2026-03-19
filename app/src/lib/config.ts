@@ -1,5 +1,5 @@
 import { http, createConfig } from 'wagmi';
-import { base } from 'wagmi/chains';
+import { base, mainnet } from 'wagmi/chains';
 import { connectorsForWallets } from '@rainbow-me/rainbowkit';
 import {
   injectedWallet,
@@ -22,8 +22,9 @@ const connectors = connectorsForWallets(
 
 export const config = createConfig({
   connectors,
-  chains: [base],
+  chains: [base, mainnet],
   transports: {
     [base.id]: http(),
+    [mainnet.id]: http(), // for ENS resolution
   },
 });
