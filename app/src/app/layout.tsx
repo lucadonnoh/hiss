@@ -3,6 +3,7 @@ import { IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/providers';
 import { Header } from '@/components/header';
+import { Footer } from '@/components/footer';
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="flex flex-col min-h-dvh md:h-dvh md:overflow-hidden">
             <Header />
             <main className="flex-1 md:overflow-auto">{children}</main>
+            <Footer />
           </div>
         </Providers>
       </body>
