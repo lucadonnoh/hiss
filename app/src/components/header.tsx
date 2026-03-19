@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <header className="border-b border-[#1a1a1f] bg-[#0c0c0f] shrink-0">
-      <div className="max-w-4xl mx-auto px-4 h-11 flex items-center justify-between text-xs">
+      <div className="max-w-4xl mx-auto px-4 min-h-[44px] flex items-center justify-between text-xs">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-1.5">
             <span className="text-sm font-bold tracking-tight text-emerald-400 glow-accent">
@@ -34,7 +34,7 @@ export function Header() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-h-[40px] min-w-[165px] justify-end">
           <span className="hidden sm:inline text-zinc-600 text-[10px]">BASE</span>
           <ConnectButton
             accountStatus="address"

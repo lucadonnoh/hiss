@@ -17,7 +17,7 @@ export default function Home() {
           <CreateListingForm />
         </div>
         {/* Mobile: sell form stacked below */}
-        <div className="md:hidden border-t border-[#1a1a1f] bg-[#0c0c0f]">
+        <div className="md:hidden border-t border-[#1a1a1f] bg-[#0c0c0f] min-h-[110px]">
           <CreateListingForm />
         </div>
       </div>
