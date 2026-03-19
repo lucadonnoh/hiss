@@ -110,4 +110,24 @@ app.get("/registrations/:nullifier", async (c) => {
   });
 });
 
+// ETH price proxy (avoids client-side CORS/rate-limit issues with CoinGecko)
+let cachedPrice: { usd: number; ts: number } | null = null;
+
+app.get("/eth-price", async (c) => {
+  const now = Date.now();
+  if (cachedPrice && now - cachedPrice.ts < 60_000) {
+    return c.json({ usd: cachedPrice.usd });
+  }
+  try {
+    const res = await fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+    );
+    const data = await res.json();
+    cachedPrice = { usd: data.ethereum.usd, ts: now };
+    return c.json({ usd: data.ethereum.usd });
+  } catch {
+    return c.json({ usd: cachedPrice?.usd || null });
+  }
+});
+
 export default app;

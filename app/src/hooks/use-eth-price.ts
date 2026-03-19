@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { API_BASE } from '@/lib/api';
 
 export function useEthPrice() {
   const [price, setPrice] = useState<number | null>(null);
@@ -8,11 +9,9 @@ export function useEthPrice() {
   useEffect(() => {
     async function fetchPrice() {
       try {
-        const res = await fetch(
-          'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd'
-        );
+        const res = await fetch(`${API_BASE}/eth-price`);
         const data = await res.json();
-        setPrice(data.ethereum.usd);
+        if (data.usd) setPrice(data.usd);
       } catch {
         // silently fail
       }
