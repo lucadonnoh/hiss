@@ -2,6 +2,8 @@
 
 Trustless on-chain marketplace for World ID verification on Base.
 
+**Live:** [hiss.slopo.net](https://hiss.slopo.net) | **Contract:** [`0x30230575991055532408db1c36b924347cc34520`](https://basescan.org/address/0x30230575991055532408db1c36b924347cc34520) (verified)
+
 World ID holders sell their verification to buyers who need it for agent wallets. Sellers list offers, buyers pick a seller and lock funds, the seller registers the buyer's agent via [AgentBook](https://github.com/worldcoin/agentkit), and the escrow contract verifies the registration landed on-chain before releasing payment.
 
 ## How it works
@@ -29,7 +31,7 @@ Seller                          Contract                         Buyer
 4. Call `resolve()` to claim payment
 
 ### Buyer flow
-1. Browse active sellers, check their registration count
+1. Browse active sellers, check their registration count and ENS names
 2. Accept a listing — your funds are locked in escrow
 3. Wait for the seller to register your agent
 4. Once registered, the seller claims payment. You can cancel anytime before registration.
@@ -52,6 +54,8 @@ One listing per World ID (nullifier hash is the listing key). No protocol fee. N
 
 ## Security & Griefing Analysis
 
+Audited with [Slither](https://github.com/crytic/slither) — no actionable findings. 32 tests, 100% line coverage.
+
 ### Seller griefing buyer
 
 **Seller delists after buyer deposits** — Safe. Delisting only prevents new orders. Existing orders are unaffected. The buyer can still cancel, and the seller can still register + resolve.
@@ -66,7 +70,7 @@ One listing per World ID (nullifier hash is the listing key). No protocol fee. N
 
 ### Third-party griefing
 
-**Someone registers the agent with a wrong nullifier** — Safe. This was a critical bug that was found and fixed. If a third party registers the agent with a different nullifier:
+**Someone registers the agent with a wrong nullifier** — Safe. If a third party registers the agent with a different nullifier:
 - `resolve()` reverts with `NullifierMismatch` (correct — wrong seller)
 - `cancelOrder()` succeeds (the registered nullifier ≠ order nullifier, so the cancel check passes)
 - Buyer gets their funds back. No funds stuck.
@@ -85,7 +89,7 @@ hiss/
 │   └── script/
 ├── app/                # Next.js — frontend
 │   └── src/
-│       ├── components/ # Terminal-style UI
+│       ├── components/ # Terminal-style UI with ENS support
 │       ├── hooks/      # wagmi + react-query
 │       └── lib/        # contracts, utils, api
 └── indexer/            # Ponder — event indexer
@@ -96,12 +100,23 @@ hiss/
 ## Running locally
 
 ```bash
-# Indexer (port 42069)
+# Install dependencies
+cd app && npm install
+cd ../indexer && npm install
+
+# Start indexer (port 42069)
 cd indexer && npx ponder dev
 
-# Frontend (port 3000)
+# Start frontend (port 3000)
 cd app && npm run dev
 ```
+
+## Deployment
+
+- **Frontend:** Railway (Dockerfile, Next.js)
+- **Indexer:** Railway (Ponder + Postgres)
+- **Contract:** Base mainnet, verified on Basescan
+- **DNS:** Cloudflare (proxied CNAME)
 
 ## Dependencies
 
