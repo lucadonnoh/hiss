@@ -26,10 +26,12 @@ contract HissEscrow is ReentrancyGuard {
     }
 
     IAgentBook public immutable agentBook;
+    address public immutable supportedERC20;
     uint256 public nextOrderId;
 
     mapping(uint256 => Listing) public listings; // nullifierHash => Listing
     mapping(uint256 => Order) public orders;     // orderId => Order
+    mapping(address => bool) public agentOrderPending;
 
     event ListingCreated(uint256 indexed nullifier, address indexed seller, address token, uint256 price);
     event ListingDeactivated(uint256 indexed nullifier);
@@ -51,10 +53,14 @@ contract HissEscrow is ReentrancyGuard {
     error TransferFailed();
     error WrongPayment();
     error InvalidNullifier();
+    error UnsupportedToken();
+    error AgentOrderPending();
 
-    constructor(address _agentBook) {
+    constructor(address _agentBook, address _supportedERC20) {
         if (_agentBook == address(0)) revert ZeroAddress();
+        if (_supportedERC20 == address(0)) revert ZeroAddress();
         agentBook = IAgentBook(_agentBook);
+        supportedERC20 = _supportedERC20;
     }
 
     // ===== Seller =====
@@ -62,6 +68,7 @@ contract HissEscrow is ReentrancyGuard {
     function createListing(uint256 nullifier, address token, uint256 price) external {
         if (nullifier == 0) revert InvalidNullifier();
         if (price == 0) revert ZeroAmount();
+        if (token != address(0) && token != supportedERC20) revert UnsupportedToken();
         Listing storage listing = listings[nullifier];
         if (listing.seller != address(0) && listing.seller != msg.sender) revert AlreadyHasListing();
 
@@ -86,7 +93,9 @@ contract HissEscrow is ReentrancyGuard {
         Listing storage listing = listings[nullifier];
         if (!listing.active) revert ListingNotActive();
         if (agentAddress == address(0)) revert ZeroAddress();
+        if (listing.token != address(0) && listing.token != supportedERC20) revert UnsupportedToken();
         if (agentBook.lookupHuman(agentAddress) != 0) revert AgentAlreadyRegistered();
+        if (agentOrderPending[agentAddress]) revert AgentOrderPending();
 
         uint256 amount = listing.price;
 
@@ -96,6 +105,8 @@ contract HissEscrow is ReentrancyGuard {
             if (msg.value != 0) revert WrongPayment();
             IERC20(listing.token).safeTransferFrom(msg.sender, address(this), amount);
         }
+
+        agentOrderPending[agentAddress] = true;
 
         uint256 orderId = nextOrderId++;
         orders[orderId] = Order({
@@ -121,6 +132,7 @@ contract HissEscrow is ReentrancyGuard {
         if (registeredNullifier == order.nullifier) revert AgentAlreadyRegistered();
 
         order.resolved = true;
+        _releasePendingAgent(order.agentAddress);
         emit OrderCancelled(orderId);
         _transfer(order.token, order.buyer, order.amount);
     }
@@ -137,6 +149,7 @@ contract HissEscrow is ReentrancyGuard {
         if (registeredNullifier != order.nullifier) revert NullifierMismatch();
 
         order.resolved = true;
+        _releasePendingAgent(order.agentAddress);
 
         address seller = listings[order.nullifier].seller;
         uint256 payout = order.amount;
@@ -164,5 +177,9 @@ contract HissEscrow is ReentrancyGuard {
         } else {
             IERC20(token).safeTransfer(to, amount);
         }
+    }
+
+    function _releasePendingAgent(address agentAddress) internal {
+        agentOrderPending[agentAddress] = false;
     }
 }

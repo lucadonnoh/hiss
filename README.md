@@ -54,7 +54,7 @@ One listing per World ID (nullifier hash is the listing key). No protocol fee. N
 
 ## Security & Griefing Analysis
 
-Audited with [Slither](https://github.com/crytic/slither) — no actionable findings. 32 tests, 100% line coverage.
+Audited with [Slither](https://github.com/crytic/slither) — no project-specific actionable findings after hardening. 36 tests, 100% `HissEscrow` line coverage.
 
 ### Seller griefing buyer
 
@@ -79,13 +79,17 @@ Audited with [Slither](https://github.com/crytic/slither) — no actionable find
 
 **Buyer sends ETH with an ERC20 order** — Safe. `acceptListing()` reverts with `WrongPayment` if `msg.value != 0` for ERC20 listings.
 
+**Buyer reuses an agent across multiple open orders** — Prevented. `acceptListing()` now tracks one live order per `agentAddress`, so a single AgentBook registration cannot satisfy and pay out multiple unresolved orders.
+
+**Seller lists an arbitrary ERC20** — Prevented. `createListing()` only allows ETH or the configured USDC token, which avoids unsupported ERC20 accounting edge cases.
+
 ## Project Structure
 
 ```
 hiss/
 ├── contracts/          # Foundry — HissEscrow.sol
 │   ├── src/
-│   ├── test/           # 32 tests, 100% line coverage
+│   ├── test/           # 36 tests, 100% HissEscrow line coverage
 │   └── script/
 ├── app/                # Next.js — frontend
 │   └── src/

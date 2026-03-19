@@ -167,6 +167,10 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
               {listing.registrations}
             </span>
           </div>
+          <div className="flex justify-between px-4 py-2.5">
+            <span className="text-zinc-600">WORLD ID</span>
+            <span className="text-zinc-500 text-[10px] font-mono">{listing.nullifierHash.slice(0, 12)}...{listing.nullifierHash.slice(-6)}</span>
+          </div>
         </div>
 
         {listing.active && !isSeller && (

@@ -10,6 +10,7 @@ contract HissEscrowTest is Test {
     HissEscrow public escrow;
     MockAgentBook public agentBook;
     MockERC20 public usdc;
+    MockERC20 public dai;
 
     address public buyer = makeAddr("buyer");
     address public seller = makeAddr("seller");
@@ -21,8 +22,9 @@ contract HissEscrowTest is Test {
 
     function setUp() public {
         agentBook = new MockAgentBook();
-        escrow = new HissEscrow(address(agentBook));
         usdc = new MockERC20("USD Coin", "USDC", 6);
+        dai = new MockERC20("Dai Stablecoin", "DAI", 18);
+        escrow = new HissEscrow(address(agentBook), address(usdc));
 
         vm.deal(buyer, 10 ether);
         vm.deal(seller, 1 ether);
@@ -46,6 +48,12 @@ contract HissEscrowTest is Test {
         vm.prank(seller);
         escrow.createListing(NULL, address(usdc), USDC_PRICE);
         assertEq(escrow.getListing(NULL).token, address(usdc));
+    }
+
+    function test_createListing_revertsUnsupportedToken() public {
+        vm.prank(seller);
+        vm.expectRevert(HissEscrow.UnsupportedToken.selector);
+        escrow.createListing(NULL, address(dai), 100e18);
     }
 
     function test_createListing_revertsZeroPrice() public {
@@ -177,6 +185,21 @@ contract HissEscrowTest is Test {
 
         vm.prank(buyer);
         vm.expectRevert(HissEscrow.AgentAlreadyRegistered.selector);
+        escrow.acceptListing{value: ETH_PRICE}(NULL, agent);
+    }
+
+    function test_acceptListing_revertsPendingAgentOrder() public {
+        vm.prank(seller);
+        escrow.createListing(NULL, address(0), ETH_PRICE);
+
+        vm.prank(buyer);
+        escrow.acceptListing{value: ETH_PRICE}(NULL, agent);
+
+        address buyer2 = makeAddr("buyer2");
+        vm.deal(buyer2, 10 ether);
+
+        vm.prank(buyer2);
+        vm.expectRevert(HissEscrow.AgentOrderPending.selector);
         escrow.acceptListing{value: ETH_PRICE}(NULL, agent);
     }
 
@@ -353,6 +376,25 @@ contract HissEscrowTest is Test {
         escrow.cancelOrder(0);
     }
 
+    function test_cancelOrder_releasesPendingAgent() public {
+        vm.prank(seller);
+        escrow.createListing(NULL, address(0), ETH_PRICE);
+
+        vm.prank(buyer);
+        escrow.acceptListing{value: ETH_PRICE}(NULL, agent);
+
+        vm.prank(buyer);
+        escrow.cancelOrder(0);
+
+        address buyer2 = makeAddr("buyer2");
+        vm.deal(buyer2, 10 ether);
+
+        vm.prank(buyer2);
+        escrow.acceptListing{value: ETH_PRICE}(NULL, agent);
+
+        assertEq(escrow.nextOrderId(), 2);
+    }
+
     // ===== Price change mid-order =====
 
     function test_resolve_usesLockedPrice() public {
@@ -421,6 +463,11 @@ contract HissEscrowTest is Test {
 
     function test_constructor_revertsZeroAgentBook() public {
         vm.expectRevert(HissEscrow.ZeroAddress.selector);
-        new HissEscrow(address(0));
+        new HissEscrow(address(0), address(usdc));
+    }
+
+    function test_constructor_revertsZeroSupportedToken() public {
+        vm.expectRevert(HissEscrow.ZeroAddress.selector);
+        new HissEscrow(address(agentBook), address(0));
     }
 }
