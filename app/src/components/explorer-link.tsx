@@ -8,6 +8,7 @@ export function AddressLink({ address }: { address: string }) {
   const { data: ensName } = useEnsName({
     address: address as `0x${string}`,
     chainId: mainnet.id,
+    query: { staleTime: 24 * 60 * 60 * 1000 }, // cache for 24h
   });
 
   return (
