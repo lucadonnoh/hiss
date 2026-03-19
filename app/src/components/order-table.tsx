@@ -117,13 +117,13 @@ export function OrderTable() {
             onClick={() => toggleSort('price')}
             className={`text-[10px] px-2 py-1 border transition-colors ${sortBy === 'price' ? 'text-zinc-300 border-zinc-600' : 'text-zinc-600 border-zinc-800'}`}
           >
-            Price {sortBy === 'price' && (sortDir === 'asc' ? '\u2191' : '\u2193')}
+            Price {sortBy === 'price' && (sortDir === 'asc' ? '\u2193' : '\u2191')}
           </button>
           <button
             onClick={() => toggleSort('regs')}
             className={`text-[10px] px-2 py-1 border transition-colors ${sortBy === 'regs' ? 'text-zinc-300 border-zinc-600' : 'text-zinc-600 border-zinc-800'}`}
           >
-            Registrations {sortBy === 'regs' && (sortDir === 'asc' ? '\u2191' : '\u2193')}
+            Registrations {sortBy === 'regs' && (sortDir === 'asc' ? '\u2193' : '\u2191')}
           </button>
         </div>
       </div>
@@ -154,10 +154,10 @@ export function OrderTable() {
           <div className="hidden md:grid grid-cols-[1fr_100px_140px_120px] gap-0 px-4 py-1.5 text-[10px] font-semibold text-zinc-600 uppercase tracking-wider border-b border-[#1a1a1f] bg-[#0a0a0c]">
             <div>Seller</div>
             <button onClick={() => toggleSort('regs')} className={`text-center cursor-pointer hover:text-zinc-400 transition-colors ${sortBy === 'regs' ? 'text-zinc-300' : ''}`}>
-              Registrations {sortBy === 'regs' && (sortDir === 'asc' ? '\u2191' : '\u2193')}
+              Registrations {sortBy === 'regs' && (sortDir === 'asc' ? '\u2193' : '\u2191')}
             </button>
             <button onClick={() => toggleSort('price')} className={`text-right cursor-pointer hover:text-zinc-400 transition-colors ${sortBy === 'price' ? 'text-zinc-300' : ''}`}>
-              Price {sortBy === 'price' && (sortDir === 'asc' ? '\u2191' : '\u2193')}
+              Price {sortBy === 'price' && (sortDir === 'asc' ? '\u2193' : '\u2191')}
             </button>
             <div className="text-right">Action</div>
           </div>
