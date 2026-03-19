@@ -33,7 +33,7 @@ export function Footer() {
             GitHub
           </a>
         </div>
-        <span className="text-zinc-700">Contracts are not audited. Use at your own risk.</span>
+        <span className="text-red-500/60">Contracts are not audited. Use at your own risk.</span>
       </div>
     </footer>
   );
