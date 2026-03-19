@@ -5,6 +5,7 @@ import { useAccount, useReadContract } from 'wagmi';
 import { base } from 'wagmi/chains';
 import { isAddress } from 'viem';
 import { useTx } from '@/hooks/use-tx';
+import { useQueryClient } from '@tanstack/react-query';
 import { useListings, useRefetchListings } from '@/hooks/use-listings';
 import { useListingOrders, useRefetchOrders, type OrderData } from '@/hooks/use-orders';
 import { HISS_ESCROW_ABI, HISS_ESCROW_ADDRESS, ERC20_ABI, AGENTBOOK_ABI, AGENTBOOK_ADDRESS } from '@/lib/contracts';
@@ -17,8 +18,10 @@ import { SellerOrderActions, BuyerOrderActions } from './order-actions';
 export function ListingDetail({ nullifier }: { nullifier: string }) {
   const { address } = useAccount();
   const ethPrice = useEthPrice();
+  const queryClient = useQueryClient();
   const [agentAddress, setAgentAddress] = useState('');
   const [copied, setCopied] = useState(false);
+  const [lastTxWasApprove, setLastTxWasApprove] = useState(false);
 
   const { listings } = useListings();
   const listing = listings.find((l) => l.id === nullifier);
@@ -32,9 +35,22 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
     refetchOrders();
   }
 
+  // Check ERC20 allowance (must be before early returns)
+  const { data: allowance, queryKey: allowanceKey } = useReadContract({
+    address: listing?.token as `0x${string}`,
+    abi: ERC20_ABI,
+    functionName: 'allowance',
+    args: [address as `0x${string}`, HISS_ESCROW_ADDRESS],
+    chainId: base.id,
+    query: { enabled: !!listing && !!address && listing?.token !== '0x0000000000000000000000000000000000000000' },
+  });
+
   const ordersUrl = `${API_BASE}/listings/${nullifier}/orders`;
   const listingsUrl = `${API_BASE}/listings`;
-  const acceptTx = useTx(onUpdate, ordersUrl);
+  const acceptTx = useTx(() => {
+    onUpdate();
+    queryClient.invalidateQueries({ queryKey: allowanceKey });
+  }, ordersUrl);
   const deactivateTx = useTx(onUpdate, listingsUrl);
 
   // Check if agent is already registered (must be before early returns)
@@ -105,6 +121,8 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
 
   const canAccept = listing.active && isAddress(agentAddress) && !agentAlreadyRegistered && !agentHasPendingOrder && acceptTx.status !== 'pending' && acceptTx.status !== 'confirming';
 
+  const needsApproval = !isEth && listing && (allowance === undefined || allowance < BigInt(listing.price));
+
   function handleAccept() {
     if (!canAccept || !listing) return;
     if (isEth) {
@@ -115,12 +133,21 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
         args: [BigInt(nullifier), agentAddress as `0x${string}`],
         value: BigInt(listing.price),
       });
-    } else {
+    } else if (needsApproval) {
+      setLastTxWasApprove(true);
       acceptTx.send({
         address: listing.token as `0x${string}`,
         abi: ERC20_ABI,
         functionName: 'approve',
         args: [HISS_ESCROW_ADDRESS, BigInt(listing.price)],
+      });
+    } else {
+      setLastTxWasApprove(false);
+      acceptTx.send({
+        address: HISS_ESCROW_ADDRESS,
+        abi: HISS_ESCROW_ABI,
+        functionName: 'acceptListing',
+        args: [BigInt(nullifier), agentAddress as `0x${string}`],
       });
     }
   }
@@ -128,7 +155,8 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
   function getButtonText() {
     if (acceptTx.status === 'pending') return 'CONFIRM IN WALLET...';
     if (acceptTx.status === 'confirming') return 'CONFIRMING...';
-    if (!isEth) return 'APPROVE & BUY';
+    if (needsApproval) return '1. APPROVE USDC';
+    if (!isEth) return '2. BUY VERIFICATION';
     return 'BUY VERIFICATION';
   }
 
@@ -230,9 +258,14 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
               {getButtonText()}
             </button>
 
-            {acceptTx.status === 'success' && (
+            {acceptTx.status === 'success' && !lastTxWasApprove && (
               <div className="text-emerald-400 text-[10px] text-center py-1.5 bg-emerald-500/5 border border-emerald-500/10">
                 ORDER CREATED {acceptTx.hash && <TxLink hash={acceptTx.hash} label="View tx" />}
+              </div>
+            )}
+            {acceptTx.status === 'success' && lastTxWasApprove && (
+              <div className="text-blue-400 text-[10px] text-center py-1.5 bg-blue-500/5 border border-blue-500/10">
+                USDC APPROVED — NOW CLICK &quot;2. BUY VERIFICATION&quot;
               </div>
             )}
             {acceptTx.error && (
