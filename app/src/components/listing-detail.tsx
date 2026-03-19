@@ -18,6 +18,7 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
   const { address } = useAccount();
   const ethPrice = useEthPrice();
   const [agentAddress, setAgentAddress] = useState('');
+  const [copied, setCopied] = useState(false);
 
   const { listings } = useListings();
   const listing = listings.find((l) => l.id === nullifier);
@@ -46,6 +47,17 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
     query: { enabled: isAddress(agentAddress) },
   });
   const agentAlreadyRegistered = agentNullifier !== undefined && agentNullifier !== BigInt(0);
+
+  // Check if agent already has a pending order
+  const { data: agentPending } = useReadContract({
+    address: HISS_ESCROW_ADDRESS,
+    abi: HISS_ESCROW_ABI,
+    functionName: 'agentOrderPending',
+    args: [agentAddress as `0x${string}`],
+    chainId: base.id,
+    query: { enabled: isAddress(agentAddress) },
+  });
+  const agentHasPendingOrder = agentPending === true;
 
   if (!listing) {
     return (
@@ -91,7 +103,7 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
   const isEth = listing.token === '0x0000000000000000000000000000000000000000';
   const validAgent = agentAddress === '' || isAddress(agentAddress);
 
-  const canAccept = listing.active && isAddress(agentAddress) && !agentAlreadyRegistered && acceptTx.status !== 'pending' && acceptTx.status !== 'confirming';
+  const canAccept = listing.active && isAddress(agentAddress) && !agentAlreadyRegistered && !agentHasPendingOrder && acceptTx.status !== 'pending' && acceptTx.status !== 'confirming';
 
   function handleAccept() {
     if (!canAccept || !listing) return;
@@ -169,7 +181,18 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
           </div>
           <div className="flex justify-between px-4 py-2.5">
             <span className="text-zinc-600">WORLD ID</span>
-            <span className="text-zinc-500 text-[10px] font-mono">{listing.nullifierHash.slice(0, 12)}...{listing.nullifierHash.slice(-6)}</span>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(listing.nullifierHash);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1500);
+              }}
+              className="text-zinc-500 hover:text-zinc-300 text-[10px] font-mono transition-colors"
+              title="Copy full nullifier"
+            >
+              {listing.nullifierHash.slice(0, 12)}...{listing.nullifierHash.slice(-6)}{' '}
+              <span className={copied ? 'text-emerald-400' : 'text-zinc-700'}>{copied ? 'COPIED' : 'COPY'}</span>
+            </button>
           </div>
         </div>
 
@@ -193,6 +216,9 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
               )}
               {validAgent && agentAlreadyRegistered && (
                 <span className="text-red-400 text-[10px] mt-0.5 block">THIS AGENT IS ALREADY REGISTERED</span>
+              )}
+              {validAgent && !agentAlreadyRegistered && agentHasPendingOrder && (
+                <span className="text-red-400 text-[10px] mt-0.5 block">THIS AGENT ALREADY HAS A PENDING ORDER</span>
               )}
             </div>
 

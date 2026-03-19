@@ -106,7 +106,7 @@ export default function AboutPage() {
         <h2 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider">Contract</h2>
         <p>
           <a
-            href="https://basescan.org/address/0x30230575991055532408db1c36b924347cc34520"
+            href="https://basescan.org/address/0x229b238242b73b0cb1c5a493c183426bf68cc5be"
             target="_blank"
             rel="noopener noreferrer"
             className="text-emerald-400 hover:underline"

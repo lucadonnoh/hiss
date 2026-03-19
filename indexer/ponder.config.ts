@@ -14,8 +14,8 @@ export default createConfig({
     HissEscrow: {
       abi: HissEscrowAbi,
       chain: "base",
-      address: "0x30230575991055532408db1c36b924347cc34520",
-      startBlock: 43542479,
+      address: "0x229b238242b73b0cb1c5a493c183426bf68cc5be",
+      startBlock: 43568450,
     },
     AgentBook: {
       abi: AgentBookAbi,

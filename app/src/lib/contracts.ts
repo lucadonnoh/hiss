@@ -1,4 +1,4 @@
-export const HISS_ESCROW_ADDRESS = '0x30230575991055532408db1c36b924347cc34520' as const;
+export const HISS_ESCROW_ADDRESS = '0x229b238242b73b0cb1c5a493c183426bf68cc5be' as const;
 
 // Real AgentBook on Base mainnet
 export const AGENTBOOK_ADDRESS = '0xE1D1D3526A6FAa37eb36bD10B933C1b77f4561a4' as const;
@@ -80,6 +80,13 @@ export const HISS_ESCROW_ABI = [
     name: 'acceptListing',
     outputs: [],
     stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [{ name: 'agentAddress', type: 'address' }],
+    name: 'agentOrderPending',
+    outputs: [{ name: '', type: 'bool' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
