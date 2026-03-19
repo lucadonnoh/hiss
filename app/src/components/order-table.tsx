@@ -233,6 +233,7 @@ export function OrderTable() {
           ))}
         </>
       )}
+      {!isLoading && <div className="snake-divider" />}
     </div>
   );
 }

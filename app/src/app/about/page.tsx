@@ -27,6 +27,8 @@ export default function AboutPage() {
         </p>
       </section>
 
+      <div className="snake-divider" />
+
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider">The Flow</h2>
         <div className="border border-[#1a1a1f] bg-[#0c0c0f] p-4 space-y-4 text-xs">
@@ -66,6 +68,8 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <div className="snake-divider" />
+
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider">Trust Model</h2>
         <p>
@@ -91,6 +95,8 @@ export default function AboutPage() {
         </ul>
       </section>
 
+      <div className="snake-divider" />
+
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider">Registration Count</h2>
         <p>
@@ -101,6 +107,8 @@ export default function AboutPage() {
           &quot;fresh&quot; or heavily used.
         </p>
       </section>
+
+      <div className="snake-divider" />
 
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider">Contract</h2>
@@ -118,6 +126,8 @@ export default function AboutPage() {
           100% line coverage.
         </p>
       </section>
+
+      <div className="snake-divider" />
 
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-zinc-200 uppercase tracking-wider">Source</h2>

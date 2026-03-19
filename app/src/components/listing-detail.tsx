@@ -296,7 +296,8 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
         )}
       </div>
 
-      {orders.length > 0 && (
+      {orders.length > 0 && (<>
+        <div className="snake-divider" />
         <div className="border border-[#1a1a1f] bg-[#0c0c0f]">
           <div className="px-4 py-2 border-b border-[#1a1a1f]">
             <span className="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider">
@@ -368,7 +369,7 @@ export function ListingDetail({ nullifier }: { nullifier: string }) {
             );
           })}
         </div>
-      )}
+      </>)}
     </div>
   );
 }

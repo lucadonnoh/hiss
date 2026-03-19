@@ -76,6 +76,15 @@ input[type="number"] {
   text-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
 }
 
+/* Serpentine section divider */
+.snake-divider {
+  height: 12px;
+  background:
+    radial-gradient(circle at 10px 0, transparent 9px, #10b98130 9px, #10b98130 10px, transparent 10px),
+    radial-gradient(circle at 10px 12px, transparent 9px, #10b98130 9px, #10b98130 10px, transparent 10px);
+  background-size: 20px 12px;
+}
+
 /* RainbowKit overrides for terminal feel */
 [data-rk] button {
   font-family: "IBM Plex Mono", monospace !important;
