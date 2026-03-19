@@ -54,7 +54,7 @@ One listing per World ID (nullifier hash is the listing key). No protocol fee. N
 
 ## Security & Griefing Analysis
 
-Audited with [Slither](https://github.com/crytic/slither) — no project-specific actionable findings after hardening. 36 tests, 100% `HissEscrow` line coverage.
+**Not audited — use at your own risk.** 36 tests, 100% `HissEscrow` line coverage.
 
 ### Seller griefing buyer
 

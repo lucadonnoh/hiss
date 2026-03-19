@@ -122,8 +122,7 @@ export default function AboutPage() {
             HissEscrow
           </a>{' '}
           is deployed on Base mainnet and verified on Basescan. No admin, no protocol fee,
-          no upgradability. Audited with Slither — no actionable findings. 32 tests with
-          100% line coverage.
+          no upgradability. Not audited — use at your own risk.
         </p>
       </section>
 
