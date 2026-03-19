@@ -1,10 +1,10 @@
 # Hiss
 
-Trustless on-chain marketplace for World ID verification on Base.
+Trustless onchain marketplace for World ID verification on Base.
 
 **Live:** [hiss.slopo.net](https://hiss.slopo.net) | **Contract:** [`0x229b238242b73b0cb1c5a493c183426bf68cc5be`](https://basescan.org/address/0x229b238242b73b0cb1c5a493c183426bf68cc5be) (verified)
 
-World ID holders sell their verification to buyers who need it for agent wallets. Sellers list offers, buyers pick a seller and lock funds, the seller registers the buyer's agent via [AgentBook](https://github.com/worldcoin/agentkit), and the escrow contract verifies the registration landed on-chain before releasing payment.
+World ID holders sell their verification to buyers who need it for agent wallets. Sellers list offers, buyers pick a seller and lock funds, the seller registers the buyer's agent via [AgentBook](https://github.com/worldcoin/agentkit), and the escrow contract verifies the registration landed onchain before releasing payment.
 
 ## How it works
 

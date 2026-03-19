@@ -12,7 +12,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: 'hiss — World ID Verification Marketplace',
-  description: 'Trustless on-chain escrow for World ID verification on Base.',
+  description: 'Trustless onchain escrow for World ID verification on Base.',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
   icons: {
     icon: '/favicon.svg',

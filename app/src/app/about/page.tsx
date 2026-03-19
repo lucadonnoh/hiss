@@ -37,7 +37,7 @@ export default function AboutPage() {
             <div>
               <span className="text-zinc-200 font-medium">Seller lists an offer.</span>{' '}
               A World ID holder posts a listing with their price (ETH or USDC).
-              Their World ID nullifier hash is stored on-chain as the listing key.
+              Their World ID nullifier hash is stored onchain as the listing key.
             </div>
           </div>
           <div className="flex gap-3">
@@ -82,7 +82,7 @@ export default function AboutPage() {
           </li>
           <li className="flex gap-2">
             <span className="text-emerald-400 shrink-0">-</span>
-            <span><span className="text-zinc-200">Seller can&apos;t steal.</span> Payment only releases after on-chain verification that the agent was registered by the correct World ID.</span>
+            <span><span className="text-zinc-200">Seller can&apos;t steal.</span> Payment only releases after onchain verification that the agent was registered by the correct World ID.</span>
           </li>
           <li className="flex gap-2">
             <span className="text-emerald-400 shrink-0">-</span>
