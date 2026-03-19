@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx ponder start --schema ponder_v2",
+    "start": "npx ponder start --schema ponder_v3",
     "dev": "npx ponder dev"
   },
   "keywords": [],

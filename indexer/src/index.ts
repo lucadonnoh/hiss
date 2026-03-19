@@ -37,12 +37,17 @@ ponder.on("HissEscrow:ListingDeactivated", async ({ event, context }) => {
 
 ponder.on("HissEscrow:OrderCreated", async ({ event, context }) => {
   const nullId = event.args.nullifier.toString();
+
+  // Look up the listing to get the token
+  const parentListing = await context.db.find(listing, { id: nullId });
+  const token = parentListing?.token ?? ("0x0000000000000000000000000000000000000000" as `0x${string}`);
+
   await context.db.insert(order).values({
     id: event.args.orderId,
     nullifier: nullId,
     buyer: event.args.buyer,
     agentAddress: event.args.agentAddress,
-    token: "0x0000000000000000000000000000000000000000" as `0x${string}`,
+    token,
     amount: event.args.amount,
     status: "open",
     createdAt: event.block.number,
