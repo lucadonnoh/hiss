@@ -63,8 +63,7 @@ export function CreateListingForm() {
       </div>
 
       {!showForm ? (
-        <div className="flex-1 flex flex-col items-center justify-center gap-3 px-4">
-          <span className="text-zinc-600 text-xs">CONNECT WALLET</span>
+        <div className="flex-1 flex flex-col items-center justify-center px-4">
           <ConnectButton />
         </div>
       ) : existingListing ? (
