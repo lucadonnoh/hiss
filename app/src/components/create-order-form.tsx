@@ -63,7 +63,7 @@ export function CreateListingForm() {
       </div>
 
       {!showForm ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-4">
+        <div className="flex-1 flex flex-col items-center justify-center px-4 py-6">
           <ConnectButton />
         </div>
       ) : existingListing ? (
