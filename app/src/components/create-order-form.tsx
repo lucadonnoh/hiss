@@ -8,6 +8,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { HISS_ESCROW_ABI, HISS_ESCROW_ADDRESS, USDC_ADDRESS } from '@/lib/contracts';
 import { WorldIdVerify } from './world-id-verify';
 import { useListings, useRefetchListings } from '@/hooks/use-listings';
+import { useEthPrice } from '@/hooks/use-eth-price';
 import { API_BASE } from '@/lib/api';
 import { formatBounty } from '@/lib/utils';
 import Link from 'next/link';
@@ -16,6 +17,7 @@ type Token = 'ETH' | 'USDC';
 
 export function CreateListingForm() {
   const { isConnected, address } = useAccount();
+  const ethPrice = useEthPrice();
   const { listings } = useListings();
   const refetchListings = useRefetchListings();
   const [nullifierHash, setNullifierHash] = useState('');
@@ -132,6 +134,11 @@ export function CreateListingForm() {
                 !isValidPrice ? 'border-red-500/50' : 'border-[#1a1a1f]'
               }`}
             />
+            {token === 'ETH' && ethPrice && price && parseFloat(price) > 0 && (
+              <span className="text-zinc-600 text-[10px] mt-0.5 block">
+                ~${(parseFloat(price) * ethPrice).toFixed(2)} USD
+              </span>
+            )}
           </div>
 
           <button
